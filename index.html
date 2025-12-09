@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌍 Petualangan Dunia - Game Edukasi Anak</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="rainbow-bar"></div>
+    <div class="floating-bg" id="floatingBg"></div>
+    <div class="confetti-container" id="confettiContainer"></div>
+
+    <button class="sound-btn" id="soundBtn">🔊</button>
+
+    <div class="container">
+        <!-- ==================== WELCOME SCREEN ==================== -->
+        <div id="welcomeScreen" class="screen">
+            <div class="mascot-area">
+                <div class="mascot" id="mascot" onclick="mascotSpeak()">🦁</div>
+                <div class="speech-bubble hidden" id="speechBubble">Ayo belajar! 🌍</div>
+            </div>
+            
+            <h1 class="game-title">Petualangan Dunia</h1>
+            <p class="subtitle">Jelajahi negara-negara di dunia dengan cara yang seru! 🚀✨</p>
+
+            <div class="menu-grid">
+                <button class="menu-btn play" onclick="showModeSelect()">
+                    <span class="btn-icon">🎮</span>
+                    <span>Mulai Bermain!</span>
+                </button>
+                <button class="menu-btn learn" onclick="showLearn()">
+                    <span class="btn-icon">📚</span>
+                    <span>Belajar Negara</span>
+                </button>
+                <button class="menu-btn collection" onclick="showCollection()">
+                    <span class="btn-icon">🏆</span>
+                    <span>Koleksi</span>
+                </button>
+                <button class="menu-btn settings" onclick="showSettings()">
+                    <span class="btn-icon">⚙️</span>
+                    <span>Pengaturan</span>
+                </button>
+                <button class="menu-btn about" onclick="showAbout()">
+                    <span class="btn-icon">❓</span>
+                    <span>Cara Main</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- ==================== MODE SELECT SCREEN ==================== -->
+        <div id="modeScreen" class="screen hidden">
+            <div class="mascot-area">
+                <div class="mascot">🎯</div>
+            </div>
+            
+            <h2 class="mode-title">Pilih Mode Permainan</h2>
+
+            <div class="mode-cards">
+                <div class="mode-card selected" data-mode="flag" onclick="selectMode('flag')">
+                    <div class="mode-icon">🏳️</div>
+                    <div class="mode-name">Tebak Bendera</div>
+                    <div class="mode-desc">Lihat bendera, tebak negaranya!</div>
+                </div>
+                <div class="mode-card" data-mode="desc" onclick="selectMode('desc')">
+                    <div class="mode-icon">📝</div>
+                    <div class="mode-name">Tebak Deskripsi</div>
+                    <div class="mode-desc">Baca petunjuk, temukan jawabannya!</div>
+                </div>
+                <div class="mode-card" data-mode="capital" onclick="selectMode('capital')">
+                    <div class="mode-icon">🏛️</div>
+                    <div class="mode-name">Tebak Ibu Kota</div>
+                    <div class="mode-desc">Ibu kota mana yang benar?</div>
+                </div>
+            </div>
+
+            <div class="difficulty-section">
+                <div class="diff-title">Tingkat Kesulitan:</div>
+                <div class="diff-btns">
+                    <button class="diff-btn easy selected" onclick="selectDiff('easy')">🌱 Mudah</button>
+                    <button class="diff-btn medium" onclick="selectDiff('medium')">🌿 Sedang</button>
+                    <button class="diff-btn hard" onclick="selectDiff('hard')">🌳 Sulit</button>
+                </div>
+            </div>
+
+            <button class="start-game-btn" onclick="startGame()">🚀 Mulai Petualangan!</button>
+            <button class="back-btn" onclick="backToMenu()">← Kembali</button>
+        </div>
+
+        <!-- ==================== GAME SCREEN ==================== -->
+        <div id="gameScreen" class="screen hidden">
+            <div class="progress-section">
+                <div class="xp-bar-container">
+                    <div class="level-badge">⭐ Level <span id="levelNum">1</span></div>
+                    <div class="xp-bar">
+                        <div class="xp-fill" id="xpFill" style="width: 0%"></div>
+                    </div>
+                    <div class="xp-text"><span id="xpCurrent">0</span>/<span id="xpMax">100</span> XP</div>
+                </div>
+            </div>
+
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-value" id="scoreVal">0</div>
+                    <div class="stat-label">Skor</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon">🎯</div>
+                    <div class="stat-value" id="accuracyVal">0%</div>
+                    <div class="stat-label">Akurasi</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon">🔥</div>
+                    <div class="stat-value" id="streakVal">0</div>
+                    <div class="stat-label">Streak</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon">❤️</div>
+                    <div class="lives-display" id="livesDisplay"></div>
+                    <div class="stat-label">Nyawa</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon">🏆</div>
+                    <div class="stat-value" id="bestVal">0</div>
+                    <div class="stat-label">Terbaik</div>
+                </div>
+            </div>
+
+            <div class="timer-bar hidden" id="timerBar">
+                <div class="timer-fill" id="timerFill" style="width: 100%"></div>
+            </div>
+
+            <div class="powerups">
+                <button class="powerup" id="hintPower" onclick="useHint()" title="Petunjuk">
+                    💡<span class="powerup-count" id="hintCount">3</span>
+                </button>
+                <button class="powerup" id="skipPower" onclick="useSkip()" title="Lewati">
+                    ⏭️<span class="powerup-count" id="skipCount">2</span>
+                </button>
+                <button class="powerup" id="fiftyPower" onclick="useFifty()" title="50:50">
+                    ✂️<span class="powerup-count" id="fiftyCount">2</span>
+                </button>
+            </div>
+
+            <div class="game-card">
+                <div class="question-badge" id="questionBadge">Soal 1</div>
+                <div class="question-text" id="questionText">Bendera negara apa ini?</div>
+
+                <!-- Flag Mode -->
+                <div id="flagDisplay" class="flag-area">
+                    <img id="flagImg" class="flag-img" src="" alt="Bendera">
+                    <div id="flagSparkles"></div>
+                </div>
+
+                <!-- Description Mode -->
+                <div id="clueDisplay" class="clue-box hidden">
+                    <div class="clue-icon">🔍</div>
+                    <div class="clue-text" id="clueText"></div>
+                    <div class="clue-hint" id="clueHint"></div>
+                </div>
+
+                <div class="region-tag" id="regionTag">
+                    <span>🌏</span>
+                    <span>Benua: <span id="regionName">Asia</span></span>
+                </div>
+
+                <div class="options-grid" id="optionsGrid"></div>
+
+                <div id="feedbackBox" class="feedback-box hidden">
+                    <div class="feedback-emoji" id="feedbackEmoji">🎉</div>
+                    <div class="feedback-text" id="feedbackText">Benar!</div>
+                    <div class="fun-fact hidden" id="funFact">
+                        <div class="fun-fact-icon">💡</div>
+                        <div class="fun-fact-text" id="funFactText"></div>
+                    </div>
+                </div>
+
+                <div class="stars-earned hidden" id="starsBox"></div>
+
+                <div class="action-btns">
+                    <button class="next-btn hidden" id="nextBtn" onclick="nextQuestion()">Lanjut! 🚀</button>
+                    <button class="home-btn" onclick="confirmQuit()">🏠</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== LEARN SCREEN ==================== -->
+        <div id="learnScreen" class="screen hidden">
+            <div class="learn-header">
+                <h2 class="learn-title">📚 Belajar Negara</h2>
+                <div class="search-box">
+                    <span>🔍</span>
+                    <input type="text" id="searchInput" placeholder="Cari negara..." oninput="filterCountries()">
+                </div>
+            </div>
+
+            <div class="country-count" id="countryCount">Total: 0 Negara</div>
+
+            <div class="continent-tabs" id="continentTabs">
+                <button class="continent-tab active" data-cont="all" onclick="filterByContinent('all')">🌍 Semua</button>
+                <button class="continent-tab" data-cont="Asia" onclick="filterByContinent('Asia')">🌏 Asia</button>
+                <button class="continent-tab" data-cont="Eropa" onclick="filterByContinent('Eropa')">🏰 Eropa</button>
+                <button class="continent-tab" data-cont="Amerika" onclick="filterByContinent('Amerika')">🗽 Amerika</button>
+                <button class="continent-tab" data-cont="Afrika" onclick="filterByContinent('Afrika')">🦁 Afrika</button>
+                <button class="continent-tab" data-cont="Oseania" onclick="filterByContinent('Oseania')">🦘 Oseania</button>
+            </div>
+
+            <div class="countries-grid" id="countriesGrid"></div>
+
+            <button class="back-btn" onclick="backToMenu()">← Kembali</button>
+        </div>
+
+        <!-- ==================== COLLECTION SCREEN ==================== -->
+        <div id="collectionScreen" class="screen hidden">
+            <h2 class="learn-title">🏆 Koleksi Lencana</h2>
+            
+            <div class="badges-section">
+                <h3>Lencana Kamu:</h3>
+                <div class="badges-grid" id="badgesGrid"></div>
+            </div>
+
+            <button class="back-btn" onclick="backToMenu()">← Kembali</button>
+        </div>
+
+        <!-- ==================== SETTINGS SCREEN ==================== -->
+        <div id="settingsScreen" class="screen hidden">
+            <h2 class="learn-title">⚙️ Pengaturan</h2>
+
+            <div class="settings-item">
+                <div class="settings-label">
+                    <span>🎵 Volume Musik</span>
+                    <span id="musicVolVal">60%</span>
+                </div>
+                <input type="range" class="slider" id="musicVolSlider" min="0" max="100" value="60" oninput="setMusicVolume(this.value)">
+            </div>
+
+            <div class="settings-item">
+                <div class="settings-label">
+                    <span>🔊 Volume SFX</span>
+                    <span id="sfxVolVal">80%</span>
+                </div>
+                <input type="range" class="slider" id="sfxVolSlider" min="0" max="100" value="80" oninput="setSfxVolume(this.value)">
+            </div>
+
+            <div class="settings-item">
+                <div class="settings-label">
+                    <span>⏱️ Mode Timer</span>
+                    <div class="toggle" id="timerToggle" onclick="toggleTimer()"></div>
+                </div>
+            </div>
+
+            <div class="settings-item">
+                <div class="settings-label">
+                    <span>✨ Efek Partikel</span>
+                    <div class="toggle active" id="particleToggle" onclick="toggleParticles()"></div>
+                </div>
+            </div>
+
+            <button class="back-btn" onclick="backToMenu()">← Kembali</button>
+        </div>
+
+        <!-- ==================== ABOUT SCREEN ==================== -->
+        <div id="aboutScreen" class="screen hidden">
+            <h2 class="learn-title">❓ Cara Bermain</h2>
+
+            <div class="about-content">
+                <div class="about-section">
+                    <h3>🎮 Mode Permainan:</h3>
+                    <ul>
+                        <li><span>🏳️</span> <strong>Tebak Bendera</strong> - Lihat bendera, pilih nama negaranya</li>
+                        <li><span>📝</span> <strong>Tebak Deskripsi</strong> - Baca petunjuk tentang negara</li>
+                        <li><span>🏛️</span> <strong>Tebak Ibu Kota</strong> - Cocokkan negara dengan ibu kotanya</li>
+                    </ul>
+                </div>
+
+                <div class="about-section">
+                    <h3>💡 Power-Up:</h3>
+                    <ul>
+                        <li><span>💡</span> <strong>Petunjuk</strong> - Menyorot jawaban yang benar</li>
+                        <li><span>⏭️</span> <strong>Lewati</strong> - Skip soal tanpa kehilangan nyawa</li>
+                        <li><span>✂️</span> <strong>50:50</strong> - Menghapus 2 jawaban salah</li>
+                    </ul>
+                </div>
+
+                <div class="about-section">
+                    <h3>⭐ Tips:</h3>
+                    <ul>
+                        <li><span>🔥</span> Jawab benar berturut-turut untuk dapat streak bonus!</li>
+                        <li><span>📚</span> Pelajari negara di menu "Belajar Negara" dulu!</li>
+                        <li><span>🏆</span> Kumpulkan lencana dengan menyelesaikan tantangan!</li>
+                    </ul>
+                </div>
+
+                <div class="credits-box">
+                    <h3>👨‍💻 Tim Pengembang:</h3>
+                    <p><strong>Ahmad Farid Zulkarnain</strong> (24020063)</p>
+                    <p><strong>Apriliano Hasta Asfirza</strong> (24020070)</p>
+                    <p><strong>Muhammad Rosyid</strong> (24020077)</p>
+                </div>
+            </div>
+
+            <button class="back-btn" onclick="backToMenu()">← Kembali</button>
+        </div>
+    </div>
+
+    <!-- ==================== MODALS ==================== -->
+    <!-- Country Detail Modal -->
+    <div id="countryModal" class="country-modal hidden">
+        <div class="country-detail">
+            <button class="close-modal" onclick="closeCountryModal()">✕</button>
+            <img id="modalFlag" class="detail-flag" src="" alt="Flag">
+            <h2 class="detail-name" id="modalName"></h2>
+            <div class="detail-region" id="modalRegion"></div>
+            
+            <div class="detail-info">
+                <div class="info-row">
+                    <span class="info-icon">🏛️</span>
+                    <div>
+                        <div class="info-label">Ibu Kota</div>
+                        <div class="info-value" id="modalCapital"></div>
+                    </div>
+                </div>
+                <div class="info-row">
+                    <span class="info-icon">🗺️</span>
+                    <div>
+                        <div class="info-label">Benua</div>
+                        <div class="info-value" id="modalContinent"></div>
+                    </div>
+                </div>
+                <div class="info-row">
+                    <span class="info-icon">🔤</span>
+                    <div>
+                        <div class="info-label">Kode Negara</div>
+                        <div class="info-value" id="modalInitial"></div>
+                    </div>
+                </div>
+                <div class="info-row" id="populationRow">
+                    <span class="info-icon">👥</span>
+                    <div>
+                        <div class="info-label">Populasi</div>
+                        <div class="info-value" id="modalPopulation"></div>
+                    </div>
+                </div>
+                <div class="info-row" id="languageRow">
+                    <span class="info-icon">🗣️</span>
+                    <div>
+                        <div class="info-label">Bahasa</div>
+                        <div class="info-value" id="modalLanguage"></div>
+                    </div>
+                </div>
+                <div class="info-row" id="currencyRow">
+                    <span class="info-icon">💰</span>
+                    <div>
+                        <div class="info-label">Mata Uang</div>
+                        <div class="info-value" id="modalCurrency"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="detail-description">
+                <div class="description-title">📖 Deskripsi Singkat:</div>
+                <div class="description-content" id="modalDescription"></div>
+            </div>
+
+            <div class="detail-funfact">
+                <div class="funfact-title">💡 Fakta Menarik:</div>
+                <div class="funfact-content" id="modalFunfact"></div>
+            </div>
+
+            <!-- Tombol Informasi Lengkap -->
+            <button class="info-detail-btn" id="moreInfoBtn" onclick="showFullInfo()">
+                📚 Informasi Lengkap
+            </button>
+        </div>
+    </div>
+
+    <!-- Full Information Modal -->
+    <div id="fullInfoModal" class="modal-overlay hidden">
+        <div class="full-info-content">
+            <button class="close-modal" onclick="closeFullInfo()">✕</button>
+            
+            <div class="full-info-header">
+                <img id="fullInfoFlag" class="full-info-flag" src="" alt="Flag">
+                <div class="full-info-title-area">
+                    <h2 class="full-info-name" id="fullInfoName"></h2>
+                    <div class="full-info-region" id="fullInfoRegion"></div>
+                </div>
+            </div>
+
+            <div class="full-info-tabs">
+                <button class="info-tab active" data-tab="history" onclick="switchInfoTab('history')">📜 Sejarah</button>
+                <button class="info-tab" data-tab="geography" onclick="switchInfoTab('geography')">🗺️ Geografi</button>
+                <button class="info-tab" data-tab="culture" onclick="switchInfoTab('culture')">🎭 Budaya</button>
+            </div>
+
+            <div class="info-tab-content">
+                <div id="historyTab" class="tab-pane active">
+                    <div class="tab-icon">📜</div>
+                    <h3>Sejarah</h3>
+                    <p id="fullInfoHistory"></p>
+                </div>
+                <div id="geographyTab" class="tab-pane hidden">
+                    <div class="tab-icon">🗺️</div>
+                    <h3>Geografi</h3>
+                    <p id="fullInfoGeography"></p>
+                </div>
+                <div id="cultureTab" class="tab-pane hidden">
+                    <div class="tab-icon">🎭</div>
+                    <h3>Budaya</h3>
+                    <p id="fullInfoCulture"></p>
+                </div>
+            </div>
+
+            <div class="full-info-stats">
+                <div class="info-stat-item">
+                    <span class="stat-emoji">👥</span>
+                    <div class="stat-detail">
+                        <div class="stat-title">Populasi</div>
+                        <div class="stat-data" id="fullInfoPopulation"></div>
+                    </div>
+                </div>
+                <div class="info-stat-item">
+                    <span class="stat-emoji">🗣️</span>
+                    <div class="stat-detail">
+                        <div class="stat-title">Bahasa</div>
+                        <div class="stat-data" id="fullInfoLanguage"></div>
+                    </div>
+                </div>
+                <div class="info-stat-item">
+                    <span class="stat-emoji">💰</span>
+                    <div class="stat-detail">
+                        <div class="stat-title">Mata Uang</div>
+                        <div class="stat-data" id="fullInfoCurrency"></div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="back-info-btn" onclick="closeFullInfo()">← Kembali</button>
+        </div>
+    </div>
+
+    <!-- Game Over Modal -->
+    <div id="gameOverModal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-mascot" id="modalMascotEnd">😢</div>
+            <h2 class="modal-title gameover" id="modalTitleEnd">Game Over!</h2>
+            <p class="modal-subtitle" id="modalSubEnd">Jangan menyerah, coba lagi!</p>
+
+            <div class="final-stats">
+                <div class="final-row">
+                    <span class="final-label">🎯 Skor Akhir</span>
+                    <span class="final-value" id="finalScore">0</span>
+                </div>
+                <div class="final-row">
+                    <span class="final-label">📝 Total Soal</span>
+                    <span class="final-value" id="finalTotal">0</span>
+                </div>
+                <div class="final-row">
+                    <span class="final-label">📊 Akurasi</span>
+                    <span class="final-value" id="finalAccuracy">0%</span>
+                </div>
+                <div class="final-row">
+                    <span class="final-label">🔥 Streak Terbaik</span>
+                    <span class="final-value" id="finalBestStreak">0</span>
+                </div>
+                <div class="final-row">
+                    <span class="final-label">🏆 Rekor</span>
+                    <span class="final-value">
+                        <span id="highScoreVal">0</span>
+                        <span class="new-record-badge hidden" id="newRecordBadge">🎉 BARU!</span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="modal-btns">
+                <button class="modal-btn primary" onclick="restartGame()">🔄 Main Lagi</button>
+                <button class="modal-btn secondary" onclick="backToMenuFromModal()">🏠 Menu</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quit Confirm Modal -->
+    <div id="quitModal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-mascot">🤔</div>
+            <h2 class="modal-title" style="color: var(--purple);">Mau berhenti?</h2>
+            <p class="modal-subtitle">Progress kamu akan hilang lho...</p>
+            <div class="modal-btns">
+                <button class="modal-btn secondary" onclick="closeQuitModal()">❌ Tidak</button>
+                <button class="modal-btn primary" onclick="confirmQuitYes()">✅ Iya</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Level Up Overlay -->
+    <div id="levelUpOverlay" class="level-up-overlay hidden">
+        <div class="level-up-content">
+            <div class="level-up-text">🎉 LEVEL UP! 🎉</div>
+            <div class="level-up-number" id="newLevelNum">2</div>
+        </div>
+    </div>
+
+    <script src="countries.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
