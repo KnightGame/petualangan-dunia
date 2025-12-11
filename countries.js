@@ -394,20 +394,6 @@ const countries = [
         area: '89.342 km²'
     },
     { 
-        name: 'Israel', code: 'il', region: 'Asia', capital: 'Yerusalem', 
-        desc: 'Negara kecil di Timur Tengah dengan sejarah ribuan tahun dan tempat-tempat suci tiga agama.',
-        funFact: 'Laut Mati adalah titik terendah di Bumi! 🌊', 
-        initial: 'IL',
-        history: 'Tanah bersejarah bagi Yahudi, Kristen, dan Islam. Kerajaan Israel dan Yudea kuno. Setelah Holocaust, negara Israel modern didirikan 1948. Konflik Arab-Israel berlanjut hingga kini.',
-        geography: 'Beragam dari pantai Mediterania, gurun Negev, hingga Lembah Jordan. Laut Mati adalah titik terendah di Bumi. Tel Aviv adalah pusat ekonomi, Yerusalem pusat spiritual. Luas 22.145 km².',
-        culture: 'Masyarakat imigran dari seluruh dunia dengan budaya Yahudi yang kaya. Inovasi teknologi tinggi (Startup Nation). Hari Sabat, makanan Kosher, dan festival Yahudi penting.',
-        population: '9.9 juta jiwa (2025)',
-        language: 'Ibrani, Arab',
-        currency: 'Shekel Baru Israel (ILS)',
-        gdp: '$520 miliar (2025)',
-        area: '22.145 km²'
-    },
-    { 
         name: 'Lebanon', code: 'lb', region: 'Asia', capital: 'Beirut', 
         desc: 'Negara kecil di pesisir Laut Mediterania yang terkenal dengan makanan dan budayanya.',
         funFact: 'Lebanon adalah tempat asal pohon cedar yang legendaris! 🌲', 
