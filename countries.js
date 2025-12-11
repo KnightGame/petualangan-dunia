@@ -1,6 +1,6 @@
 // ==================== COUNTRIES DATA (100+ Countries) ====================
 const countries = [
-    // ==================== ASIA (30 Countries) ====================
+    // ==================== ASIA (29 Countries) ====================
     { 
         name: 'Indonesia', code: 'id', region: 'Asia', capital: 'Jakarta', 
         desc: 'Negara kepulauan terbesar di dunia dengan lebih dari 17.000 pulau, terletak di Asia Tenggara antara Samudra Pasifik dan Samudra Hindia.',
